@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, AlertCircle, Camera } from 'lucide-react';
+import { ArrowLeft, AlertCircle, Camera, Check, Download, ShoppingBag } from 'lucide-react';
+import { addToCart } from '../core/cart';
 
 const VirtualTryOn: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -7,11 +8,13 @@ const VirtualTryOn: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isCaptured, setIsCaptured] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
+  const [showSaveSuccess, setShowSaveSuccess] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Get products from store
   const products = window.App?.store?.products || [];
-  
+
   // Initialize with the product passed in params, or the first one
   useEffect(() => {
     const paramId = window.App?.currentState?.params?.selectedId;
@@ -23,8 +26,8 @@ const VirtualTryOn: React.FC = () => {
   useEffect(() => {
     const startCamera = async () => {
       try {
-        const mediaStream = await navigator.mediaDevices.getUserMedia({ 
-          video: { facingMode: 'environment' } 
+        const mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment' }
         });
         setStream(mediaStream);
         if (videoRef.current) {
@@ -59,13 +62,42 @@ const VirtualTryOn: React.FC = () => {
 
   const handleRetake = () => {
     setIsCaptured(false);
+    setIsAdded(false);
+  };
+
+  const handleAddToCart = () => {
+    if (selectedProduct) {
+      addToCart(selectedProduct.id, 1);
+      setIsAdded(true);
+      setTimeout(() => {
+        window.App.transitionTo('cart-view');
+      }, 800);
+    }
+  };
+
+  const handleSavePhoto = () => {
+    if (canvasRef.current) {
+      const link = document.createElement('a');
+      link.download = `mood-try-on-${Date.now()}.png`;
+      link.href = canvasRef.current.toDataURL('image/png');
+      link.click();
+      setShowSaveSuccess(true);
+      setTimeout(() => setShowSaveSuccess(false), 2000);
+    }
   };
 
   return (
     <div className="fixed inset-0 bg-black z-50 flex flex-col">
+      {/* Save Success Toast */}
+      {showSaveSuccess && (
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-50 bg-green-500 text-white px-6 py-3 rounded-full font-bold flex items-center gap-2 animate-in slide-in-from-top">
+          <Check size={18} /> Photo saved!
+        </div>
+      )}
+
       {/* Header */}
       <div className="absolute top-0 left-0 right-0 z-20 p-4 flex justify-between items-center bg-gradient-to-b from-black/50 to-transparent">
-        <button 
+        <button
           onClick={() => window.App.transitionTo('product-detail', { selectedId: selectedProduct?.id })}
           className="text-white p-2 bg-white/10 backdrop-blur-md rounded-full"
         >
@@ -84,7 +116,7 @@ const VirtualTryOn: React.FC = () => {
             <AlertCircle size={48} className="text-red-500 mb-4" />
             <h3 className="text-xl font-bold mb-2">Camera Access Denied</h3>
             <p className="text-gray-400">{error}</p>
-            <button 
+            <button
               onClick={() => window.location.reload()}
               className="mt-6 bg-white text-black px-6 py-2 rounded-full font-bold"
             >
@@ -94,16 +126,16 @@ const VirtualTryOn: React.FC = () => {
         ) : (
           <>
             {/* Video Feed */}
-            <video 
+            <video
               ref={videoRef}
-              autoPlay 
-              playsInline 
+              autoPlay
+              playsInline
               muted
               className={`w-full h-full object-cover ${isCaptured ? 'hidden' : 'block'}`}
             />
-            
+
             {/* Captured Image Canvas */}
-            <canvas 
+            <canvas
               ref={canvasRef}
               className={`w-full h-full object-cover ${isCaptured ? 'block' : 'hidden'}`}
             />
@@ -113,7 +145,7 @@ const VirtualTryOn: React.FC = () => {
               {/* Hand Guide Outline - CSS based fallback */}
               <div className="absolute w-64 h-96 border-4 border-white/50 border-dashed rounded-[3rem] opacity-50"></div>
               <div className="absolute w-64 h-96 border-4 border-primary/30 rounded-[3rem] animate-pulse"></div>
-              
+
               {/* The Nails Overlay - Positioned to match a generic hand holding phone or flat hand */}
               {/* This is a simplified visual representation for the prototype */}
               <div className="relative w-64 h-80 opacity-90 animate-pulse-slow">
@@ -128,7 +160,7 @@ const VirtualTryOn: React.FC = () => {
                  {/* Pinky */}
                  <div className="absolute bottom-20 right-[-10px] w-12 h-16 bg-cover rounded-full rotate-[25deg] shadow-xl" style={{ backgroundImage: `url(${selectedProduct?.image})` }}></div>
               </div>
-              
+
               <div className="absolute bottom-40 text-white/80 text-sm font-bold animate-bounce">
                 ALIGN YOUR HAND HERE
               </div>
@@ -145,7 +177,7 @@ const VirtualTryOn: React.FC = () => {
             <p className="text-gray-400 text-sm">${selectedProduct?.price.toFixed(2)}</p>
           </div>
           {!isCaptured ? (
-            <button 
+            <button
               onClick={handleCapture}
               className="w-16 h-16 rounded-full border-4 border-white flex items-center justify-center bg-white/20 active:scale-95 transition-transform"
             >
@@ -153,30 +185,53 @@ const VirtualTryOn: React.FC = () => {
             </button>
           ) : (
             <div className="flex gap-2">
-               <button 
+               <button
                 onClick={handleRetake}
-                className="px-4 py-2 bg-gray-800 rounded-full font-bold text-sm"
+                className="px-4 py-2 bg-gray-800 rounded-full font-bold text-sm hover:bg-gray-700 transition-colors"
               >
                 RETAKE
               </button>
-              <button 
-                onClick={() => window.App.transitionTo('cart-view')} // Simplified add to cart flow
-                className="px-4 py-2 bg-primary text-black rounded-full font-bold text-sm"
+              <button
+                onClick={handleSavePhoto}
+                className="px-4 py-2 bg-gray-800 rounded-full font-bold text-sm hover:bg-gray-700 transition-colors flex items-center gap-1"
               >
-                ADD TO CART
+                <Download size={16} /> SAVE
+              </button>
+              <button
+                onClick={handleAddToCart}
+                disabled={isAdded}
+                className={`px-4 py-2 rounded-full font-bold text-sm flex items-center gap-1 transition-all ${
+                  isAdded
+                    ? 'bg-green-500 text-white'
+                    : 'bg-primary text-black hover:bg-primary-hover'
+                }`}
+              >
+                {isAdded ? (
+                  <>
+                    <Check size={16} /> ADDED!
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag size={16} /> ADD TO CART
+                  </>
+                )}
               </button>
             </div>
           )}
           <div className="flex-1 flex justify-end">
              {/* Product Switcher Mini */}
              <div className="flex -space-x-2 overflow-hidden">
-                {products.slice(0,3).map((p: any) => (
-                  <div 
+                {products.slice(0,4).map((p: any) => (
+                  <div
                     key={p.id}
-                    onClick={() => setSelectedProduct(p)}
-                    className={`w-10 h-10 rounded-full border-2 border-white bg-gray-800 cursor-pointer overflow-hidden ${selectedProduct?.id === p.id ? 'ring-2 ring-primary z-10' : 'opacity-50'}`}
+                    onClick={() => {
+                      setSelectedProduct(p);
+                      setIsCaptured(false);
+                      setIsAdded(false);
+                    }}
+                    className={`w-10 h-10 rounded-full border-2 border-white bg-gray-800 cursor-pointer overflow-hidden transition-all ${selectedProduct?.id === p.id ? 'ring-2 ring-primary z-10 scale-110' : 'opacity-50 hover:opacity-80'}`}
                   >
-                    <img src={p.image} className="w-full h-full object-cover" />
+                    <img src={p.image} className="w-full h-full object-cover" alt={p.name} />
                   </div>
                 ))}
              </div>

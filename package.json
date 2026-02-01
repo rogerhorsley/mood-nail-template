@@ -16,6 +16,7 @@
     "clsx": "2.1.1",
     "css-loader": "7.1.2",
     "framer-motion": "12.29.0",
+    "html2canvas": "^1.4.1",
     "lucide-react": "0.562.0",
     "postcss": "8.5.6",
     "postcss-loader": "8.2.0",

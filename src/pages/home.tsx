@@ -1,20 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
 import { ArrowRight, Star, Check, Play, ShoppingBag, Sparkles } from 'lucide-react';
+import { addToCart } from '../core/cart';
 
 const Home: React.FC = () => {
   const products = window.App?.store?.products || [];
   const reviews = window.App?.store?.reviews || [];
   const featuredProducts = products.slice(0, 4);
+  const [addedProductId, setAddedProductId] = useState<string | null>(null);
+
+  const handleQuickAdd = (e: React.MouseEvent, productId: string) => {
+    e.stopPropagation();
+    addToCart(productId, 1);
+    setAddedProductId(productId);
+    setTimeout(() => setAddedProductId(null), 1500);
+  };
 
   return (
     <Layout>
       {/* Hero Section */}
       <section className="relative h-[80vh] bg-gray-900 overflow-hidden flex items-center justify-center">
         <div className="absolute inset-0 opacity-60">
-          <img 
-            src="https://user-assert.oss-us-east-1.aliyuncs.com/images/5df83cf2c24bd408328509a3505a034a.jpg" 
-            alt="Hero Background" 
+          <img
+            src="https://user-assert.oss-us-east-1.aliyuncs.com/images/5df83cf2c24bd408328509a3505a034a.jpg"
+            alt="Hero Background"
             className="w-full h-full object-cover"
             style={{ backgroundColor: 'rgba(255, 255, 255, 0.52)' }}
           />
@@ -28,13 +37,13 @@ const Home: React.FC = () => {
             The viral reusable manicure that fits perfectly and lasts up to 2 weeks. No damage, no glue mess.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
+            <button
               onClick={() => window.App.transitionTo('shop-all')}
               className="bg-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)]"
             >
               SHOP THE DROP
             </button>
-            <button 
+            <button
               onClick={() => window.App.transitionTo('subscription-landing')}
               className="bg-white text-black px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
             >
@@ -76,18 +85,18 @@ const Home: React.FC = () => {
       <section className="py-20 max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-end mb-12">
           <h2 className="text-4xl font-black tracking-tight">TRENDING NOW</h2>
-          <button 
+          <button
             onClick={() => window.App.transitionTo('shop-all')}
             className="font-bold border-b-2 border-black pb-1 hover:text-primary hover:border-primary transition-colors"
           >
             VIEW ALL
           </button>
         </div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {featuredProducts.map((product: any) => (
-            <div 
-              key={product.id} 
+            <div
+              key={product.id}
               className="group cursor-pointer"
               onClick={() => window.App.transitionTo('product-detail', { selectedId: product.id })}
             >
@@ -98,8 +107,15 @@ const Home: React.FC = () => {
                     NEW DROP
                   </span>
                 )}
-                <button className="absolute bottom-4 right-4 bg-white p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-primary hover:text-white">
-                  <ShoppingBag size={20} />
+                <button
+                  onClick={(e) => handleQuickAdd(e, product.id)}
+                  className={`absolute bottom-4 right-4 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 ${
+                    addedProductId === product.id
+                      ? 'bg-green-500 text-white opacity-100 translate-y-0'
+                      : 'bg-white opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 hover:bg-primary hover:text-white'
+                  }`}
+                >
+                  {addedProductId === product.id ? <Check size={20} /> : <ShoppingBag size={20} />}
                 </button>
               </div>
               <h3 className="font-bold text-lg">{product.name}</h3>
@@ -127,7 +143,7 @@ const Home: React.FC = () => {
           <p className="text-xl text-gray-300 mb-10 max-w-xl mx-auto">
             Not sure where to start? Take our 30-second quiz to find the set that matches your energy.
           </p>
-          <button 
+          <button
             onClick={() => window.App.transitionTo('quiz-intro')}
             className="bg-white text-black px-10 py-4 rounded-full font-black text-xl hover:bg-primary transition-colors hover:scale-105 duration-300"
           >
@@ -143,7 +159,7 @@ const Home: React.FC = () => {
             <span className="inline-block bg-black text-white px-4 py-1 rounded-full text-sm font-bold mb-6">THE NAIL CLUB</span>
             <h2 className="text-5xl font-black mb-6 leading-none">NEVER HAVE NAKED NAILS AGAIN.</h2>
             <p className="text-xl mb-8 opacity-90">Get 2 exclusive sets delivered to your door every month. Save 20% and skip anytime.</p>
-            <button 
+            <button
               onClick={() => window.App.transitionTo('subscription-landing')}
               className="bg-accent text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
             >
