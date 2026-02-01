@@ -1,0 +1,23 @@
+{
+  "colors": {
+    "primary": "#FF0080",
+    "primary-hover": "#D6006B",
+    "accent": "#CCFF00",
+    "background": "#FFFFFF",
+    "surface": "#F8F8F8",
+    "text": "#000000",
+    "text-muted": "#666666",
+    "border": "#E5E5E5"
+  },
+  "borderRadius": {
+    "none": "0px",
+    "sm": "2px",
+    "md": "4px",
+    "lg": "8px",
+    "full": "9999px"
+  },
+  "fontFamily": {
+    "display": ["Syne", "sans-serif"],
+    "body": ["Inter", "sans-serif"]
+  }
+}

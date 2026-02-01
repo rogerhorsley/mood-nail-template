@@ -1,0 +1,74 @@
+{
+  "user": {
+    "id": "u1",
+    "name": "Bella",
+    "email": "bella@example.com",
+    "subscriptionStatus": "active",
+    "nextBoxDate": "2023-11-15"
+  },
+  "products": [
+    {
+      "id": "p1",
+      "name": "Glazed Donut",
+      "price": 18.00,
+      "subscriptionPrice": 14.40,
+      "image": "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=800&auto=format&fit=crop",
+      "shape": "Almond",
+      "isNew": true,
+      "description": "The viral chrome look that broke the internet. Pearlescent finish that catches every light."
+    },
+    {
+      "id": "p2",
+      "name": "Cyber Heart",
+      "price": 22.00,
+      "subscriptionPrice": 17.60,
+      "image": "https://plus.unsplash.com/premium_photo-1758752254924-3582bd4f4f7d?q=80&w=800&auto=format&fit=crop",
+      "shape": "Coffin",
+      "isNew": true,
+      "description": "Y2K inspired airbrush hearts on a deep black base. Edgy, cute, and dangerous."
+    },
+    {
+      "id": "p3",
+      "name": "Matcha Latte",
+      "price": 16.00,
+      "subscriptionPrice": 12.80,
+      "image": "https://plus.unsplash.com/premium_photo-1723722170029-3576210580b1?q=80&w=800&auto=format&fit=crop",
+      "shape": "Square",
+      "isNew": false,
+      "description": "Creamy green swirls for your daily caffeine fix. Soft, subtle, but never boring."
+    },
+    {
+      "id": "p4",
+      "name": "Vampire Kiss",
+      "price": 20.00,
+      "subscriptionPrice": 16.00,
+      "image": "https://images.unsplash.com/photo-1769542300349-a414f67e96fc?q=80&w=800&auto=format&fit=crop",
+      "shape": "Stiletto",
+      "isNew": false,
+      "description": "Deep red ombre that screams drama. Perfect for night outs and breaking hearts."
+    }
+  ],
+  "reviews": [
+    {
+      "id": "r1",
+      "user": "@jessicaxoxo",
+      "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop",
+      "content": "Literally took 5 mins to apply and they look like I paid $80 at the salon. Obsessed!"
+    },
+    {
+      "id": "r2",
+      "user": "@kylie_nails",
+      "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop",
+      "content": "The sizing guide saved my life. They fit perfectly and haven't popped off in 2 weeks."
+    },
+    {
+      "id": "r3",
+      "user": "@moody_gal",
+      "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
+      "content": "Joined the Nail Club and getting the mystery box is the highlight of my month."
+    }
+  ],
+  "cart": [
+    { "productId": "p2", "quantity": 1 }
+  ]
+}

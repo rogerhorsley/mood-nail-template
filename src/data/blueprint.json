@@ -1,0 +1,72 @@
+{
+  "version": "1.0",
+  "initialState": "home-default",
+  "states": [
+    {
+      "id": "home-default",
+      "name": "Home",
+      "page": "home",
+      "params": {}
+    },
+    {
+      "id": "shop-all",
+      "name": "Shop All",
+      "page": "shop",
+      "params": { "category": "all" }
+    },
+    {
+      "id": "product-detail",
+      "name": "Product Detail",
+      "page": "product",
+      "params": { "selectedId": "p1" }
+    },
+    {
+      "id": "subscription-landing",
+      "name": "The Nail Club",
+      "page": "subscription",
+      "params": {}
+    },
+    {
+      "id": "cart-view",
+      "name": "Your Cart",
+      "page": "cart",
+      "params": {}
+    },
+    {
+      "id": "account-dashboard",
+      "name": "My Account",
+      "page": "account",
+      "params": { "tab": "dashboard" }
+    },
+    {
+      "id": "account-subscription",
+      "name": "Manage Subscription",
+      "page": "account",
+      "params": { "tab": "subscription" }
+    },
+    {
+      "id": "quiz-intro",
+      "name": "Style Quiz - Intro",
+      "page": "quiz",
+      "params": { "step": "intro" }
+    },
+    {
+      "id": "quiz-question",
+      "name": "Style Quiz - Question",
+      "page": "quiz",
+      "params": { "step": "question" }
+    },
+    {
+      "id": "quiz-result",
+      "name": "Style Quiz - Result",
+      "page": "quiz",
+      "params": { "step": "result" }
+    },
+    {
+      "id": "virtual-try-on",
+      "name": "Virtual Try-On",
+      "page": "try-on",
+      "params": { "selectedId": "p1" }
+    }
+  ]
+}
